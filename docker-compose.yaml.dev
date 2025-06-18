@@ -33,17 +33,6 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf  # Usar configuración personalizada
     restart: always
 
-  queue:
-    image: intranet-app
-    container_name: intranet-queue
-    command: php artisan queue:work redis --timeout=60 --tries=3
-    depends_on:
-      - app
-      - redis
-    volumes:
-      - .:/var/www
-    restart: always
-
   node:
     image: node:14-alpine
     container_name: intranet-node-app
