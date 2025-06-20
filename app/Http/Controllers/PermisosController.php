@@ -82,6 +82,7 @@ class PermisosController extends Controller
             $dias_disponibles = DB::select("select e.emp_fecha_ingreso,e.emp_cedula, sum(ep.valor)as dias from tbl_empleados e 
             LEFT JOIN tbl_empleados_periodos ep ON CAST(e.emp_cedula AS integer) = ep.id_empleado 
             where  e.emp_estado = 'A' and emp_cedula=? GROUP BY e.emp_fecha_ingreso, e.emp_cedula", [Session::get('cedula')]);
+            $fecha_actual = DB::select('select now()::date as fecha_actual');
 
             // return $dias_disponibles;   
 
@@ -94,8 +95,10 @@ class PermisosController extends Controller
             $intervalMesesf = $intervalf->format("%m");
             $intervalAnosf = $intervalf->format("%y") * 12;
             $intervalMesesf += $intervalAnosf;
+            $fecha_actual = $fecha_actual[0]->fecha_actual;
+            //return $fecha_actual;
             //return $intervalMesesf;
-            return view('Permisos.index', compact('menus_', 'cumples', 'isCumple', 'eventos', 'permisos', 'intervalMesesf', 'dias_disponibles'));
+            return view('Permisos.index', compact('menus_', 'cumples', 'isCumple', 'eventos', 'permisos', 'intervalMesesf', 'dias_disponibles', 'fecha_actual'));
         } else {
             return view("Login.login");
         }
